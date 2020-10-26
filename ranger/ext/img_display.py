@@ -32,6 +32,7 @@ from tempfile import NamedTemporaryFile
 
 from ranger import PY3
 from ranger.core.shared import FileManagerAware
+from ranger.gui.ui import _in_tmux
 
 W3MIMGDISPLAY_ENV = "W3MIMGDISPLAY_PATH"
 W3MIMGDISPLAY_OPTIONS = []
@@ -299,7 +300,8 @@ class ITerm2ImageDisplayer(ImageDisplayer, FileManagerAware):
         filename = self._encode_image_filename(path)
         display_protocol = "\033"
         close_protocol = "\a"
-        if "screen" in os.environ['TERM']:
+        if _in_tmux():
+        # if "screen" in os.environ['TERM']
             display_protocol += "Ptmux;\033\033"
             close_protocol += "\033\\"
 
@@ -437,7 +439,8 @@ class URXVTImageDisplayer(ImageDisplayer, FileManagerAware):
     def __init__(self):
         self.display_protocol = "\033"
         self.close_protocol = "\a"
-        if "screen" in os.environ['TERM']:
+        if _in_tmux():
+        # if "screen" in os.environ['TERM']:
             self.display_protocol += "Ptmux;\033\033"
             self.close_protocol += "\033\\"
         self.display_protocol += "]20;"
